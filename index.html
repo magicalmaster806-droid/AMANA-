@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#050508">
+<title>أمانة | الخزنة الأبدية – Masterpiece Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=BAAYpvEL8qqVJKsVJctLZMuRx7pQ9rPGigQdRScreEL6n7wrzeoj034KfPhw_7WNOCrWnMHblgOxU9sZJQ&currency=USD&locale=ar_EG"></script>
+<style>
+:root{--void:#000;--abyss:#050508;--depth:#0a0a0f;--gold:#d4af37;--gold-light:#f4d03f;--crimson:#e11d48;--blood:#9f1239;--neon:#00ff88;--cyan:#00d4ff;--purple:#8b5cf6;--text:#f1f5f9;--muted:#94a3b8;--glass:rgba(15,23,42,.78)}
+*{margin:0;padding:0;box-sizing:border-box}
+html[dir=rtl] body{font-family:Cairo,sans-serif}
+html[dir=ltr] body{font-family:Inter,system-ui,sans-serif}
+body{background:var(--depth);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.7;position:relative}
+body::before{content:"HSH";position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);font-size:15vw;font-weight:900;color:#e11d48;opacity:.05;z-index:0;pointer-events:none;letter-spacing:10px}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:999999;background:linear-gradient(90deg,#7f1d1d,#e11d48,#7f1d1d);color:#fff;padding:7px;text-align:center;font-size:.76rem;border-bottom:2px solid var(--gold);display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+.limited-offer{background:linear-gradient(90deg,#7f1d1d,#e11d48,#7f1d1d);color:#fff;text-align:center;padding:5px 10px 4px;font-weight:700;position:fixed;top:34px;left:0;right:0;z-index:999998;border-bottom:2px solid var(--gold);font-size:.77rem;line-height:1.3;box-shadow:0 3px 12px rgba(225,29,72,.25)}
+.limited-offer .countdown-box{display:flex!important;justify-content:center;gap:7px;margin-top:3px!important;flex-wrap:nowrap}
+.limited-offer .countdown-item{background:rgba(0,0,0,.35);border-radius:7px;padding:2px 7px!important;min-width:44px!important;text-align:center}
+.limited-offer .countdown-item span{font-size:.95rem!important;font-weight:900;display:block;line-height:1.1}
+.limited-offer .countdown-item small{font-size:.62rem;opacity:.9}
+
+.legacy-progress{position:fixed;top:88px;left:0;right:0;height:6px;background:rgba(0,0,0,.5);z-index:999997;overflow:hidden}
+.legacy-progress-bar{height:100%;width:32%;background:linear-gradient(90deg,#e11d48,#d4af37,#00ff88,#00d4ff);background-size:300% 100%;animation:legacyGlow 4s linear infinite;box-shadow:0 0 15px rgba(0,255,136,.5);transition:width .8s cubic-bezier(.4,0,.2,1)}
+@keyframes legacyGlow{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+
+.header{position:fixed;top:94px;left:0;right:0;z-index:1000;padding:.8rem 4%;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(180deg,rgba(5,5,8,.97),rgba(5,5,8,.8),transparent);backdrop-filter:blur(16px);border-bottom:1px solid rgba(212,175,55,.15)}
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer}
+.logo h1{font-size:1.55rem;font-weight:900;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.nav a{color:var(--text);padding:.4rem .8rem;border-radius:30px;border:1px solid transparent;cursor:pointer;font-size:.8rem;text-decoration:none;transition:.25s;display:inline-block}
+.nav a:hover{color:var(--gold);border-color:var(--gold);background:rgba(212,175,55,.1)}
+.controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.controls select,.cur-btn{background:rgba(0,0,0,.5);border:1px solid rgba(212,175,55,.4);color:var(--gold);padding:6px 11px;border-radius:16px;cursor:pointer;font-size:.74rem;font-weight:700}
+.cur-btn.active{background:linear-gradient(135deg,var(--crimson),var(--blood));color:#fff;border-color:var(--crimson)}
+.coins-display{display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(212,175,55,.22),rgba(225,29,72,.18));padding:6px 14px;border-radius:25px;border:1px solid var(--gold);cursor:pointer;font-size:.84rem}
+
+#main{padding-top:155px;position:relative;z-index:1}
+
+.hero{min-height:86vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 5% 45px;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 70%,rgba(225,29,72,.15),transparent 50%),radial-gradient(ellipse at 70% 30%,rgba(212,175,55,.1),transparent 45%)}
+.badge{display:inline-flex;gap:8px;padding:8px 18px;border-radius:40px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,212,255,.09);margin-bottom:1.3rem;font-size:.85rem}
+.hero h1{font-size:clamp(2rem,6.2vw,3.6rem);font-weight:900;line-height:1.15;margin-bottom:1rem}
+.hero h1 span{display:block;background:linear-gradient(135deg,var(--gold-light),#fff,var(--crimson));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);max-width:720px;margin:0 auto 1.6rem;font-size:1.03rem}
+.stats{display:flex;gap:1.1rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.8rem}
+.stat{min-width:120px;padding:1rem;border-radius:16px;background:rgba(0,0,0,.35);border:1px solid rgba(212,175,55,.14);transition:.3s}
+.stat:hover{transform:translateY(-4px)}
+.stat b{display:block;font-size:1.8rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat span{color:var(--muted);font-size:.75rem}
+.btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{padding:.9rem 1.8rem;border-radius:40px;border:none;font-weight:700;cursor:pointer;font-size:.9rem;transition:.3s}
+.btn-p{background:linear-gradient(135deg,#e11d48,#9f1239);color:#fff;box-shadow:0 10px 30px rgba(225,29,72,.45)}
+.btn-p:hover{transform:translateY(-3px)}
+.btn-s{background:transparent;color:var(--text);border:2px solid var(--gold)}
+.btn-s:hover{background:rgba(212,175,55,.1);transform:translateY(-2px)}
+
+.section{padding:70px 5%;scroll-margin-top:160px}
+.section h2{text-align:center;color:var(--gold);font-size:clamp(1.6rem,4vw,2.3rem);margin-bottom:1.1rem;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;max-width:1200px;margin:0 auto}
+.card{background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(5,5,8,.96));border:1px solid rgba(212,175,55,.16);border-radius:20px;padding:1.5rem;text-align:center;cursor:pointer;transition:.35s;position:relative}
+.card:hover{transform:translateY(-8px);border-color:var(--gold);box-shadow:0 18px 35px rgba(0,0,0,.4)}
+.card .ico{font-size:2rem;margin-bottom:.45rem}
+.card h3{color:var(--gold);margin-bottom:.4rem;font-size:1.1rem}
+.card p{color:var(--muted);font-size:.88rem}
+.tag{position:absolute;top:10px;inset-inline-start:10px;background:linear-gradient(135deg,#ec4899,#e11d48);color:#fff;font-size:.65rem;padding:3px 9px;border-radius:12px;font-weight:700}
+.price{color:var(--gold);font-weight:900;font-size:1.3rem;margin:.5rem 0}
+.price-tag{display:inline-block;background:linear-gradient(135deg,#e11d48,#be123c);color:#fff;padding:5px 13px;border-radius:16px;font-size:.86rem;font-weight:700}
+
+.pricing{display:flex;flex-wrap:wrap;gap:1.3rem;justify-content:center}
+.plan{width:290px;background:var(--glass);border:1px solid rgba(212,175,55,.18);border-radius:22px;padding:1.6rem;text-align:center;backdrop-filter:blur(12px);transition:.3s}
+.plan:hover{transform:translateY(-6px)}
+.plan.feat{border:2px solid var(--crimson);box-shadow:0 0 25px rgba(225,29,72,.18)}
+.plan .big{font-size:2.5rem;font-weight:900;margin:.55rem 0;color:var(--crimson)}
+.features{list-style:none;text-align:start;margin:1rem 0;color:var(--muted);font-size:.86rem}
+.features li{padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.features li::before{content:"✓ ";color:var(--gold);font-weight:700}
+.guarantee-badge{display:inline-block;background:rgba(0,255,136,.1);border:1px solid var(--neon);color:var(--neon);padding:6px 13px;border-radius:16px;font-size:.82rem;margin:9px 0}
+
+.gift-grid{display:flex;justify-content:center;gap:1.6rem;flex-wrap:wrap}
+.gift-card{width:280px;padding:1.9rem;border-radius:20px;text-align:center;transition:.3s}
+.gift-card:hover{transform:scale(1.03)}
+.gift-card.bronze{background:linear-gradient(145deg,#cd7f32,#8b4513)}
+.gift-card.silver{background:linear-gradient(145deg,#e2e8f0,#94a3b8);color:#0f172a}
+.gift-card.gold{background:linear-gradient(145deg,#fbbf24,#b45309);color:#0f172a;box-shadow:0 12px 30px rgba(251,191,36,.25)}
+
+.pay-buttons{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:11px}
+.paypal-container{min-height:42px;width:100%}
+.instapay-btn{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#00d4ff,#0066cc);color:#fff;padding:9px 16px;border-radius:18px;text-decoration:none;font-weight:600;font-size:.84rem;width:100%;max-width:210px}
+
+.trust-bar{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;padding:20px 5%;background:rgba(0,0,0,.3);border-top:1px solid rgba(212,175,55,.1);border-bottom:1px solid rgba(212,175,55,.1)}
+.trust-item{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:.88rem}
+
+.testimonial{background:rgba(0,0,0,.3);border:1px solid rgba(212,175,55,.14);border-radius:16px;padding:18px;text-align:center}
+.testimonial p{color:var(--muted);font-style:italic;margin-bottom:9px}
+.testimonial strong{color:var(--gold)}
+
+.roulette-section{padding:65px 5%;background:linear-gradient(135deg,var(--abyss),#1a0a1a);text-align:center}
+.roulette-wheel{width:230px;height:230px;margin:1.6rem auto;border-radius:50%;background:conic-gradient(from 0deg,var(--crimson) 0 60deg,var(--gold) 60deg 120deg,var(--purple) 120deg 180deg,var(--neon) 180deg 240deg,#ec4899 240deg 300deg,var(--cyan) 300deg 360deg);position:relative;animation:spin 12s linear infinite;cursor:pointer}
+@keyframes spin{to{transform:rotate(360deg)}}
+.roulette-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;background:var(--depth);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+
+.quiz-box,.gen-box,.wall-box,.contact{max-width:660px;margin:0 auto;background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(5,5,8,.96));border:1px solid rgba(212,175,55,.15);border-radius:20px;padding:1.5rem}
+label{display:block;color:var(--gold);font-size:.84rem;margin-bottom:5px;font-weight:600}
+input,textarea,select{width:100%;padding:11px;margin-bottom:11px;border-radius:11px;border:2px solid rgba(212,175,55,.2);background:rgba(0,0,0,.4);color:var(--text);font:inherit}
+.quiz-options{display:flex;flex-direction:column;gap:9px;margin-bottom:1.2rem}
+.quiz-options button{padding:12px 15px;border-radius:11px;border:1px solid rgba(212,175,55,.3);background:rgba(0,0,0,.4);color:var(--text);cursor:pointer;text-align:start;transition:.2s}
+.quiz-options button:hover{border-color:var(--gold);background:rgba(212,175,55,.1)}
+.score-circle{width:150px;height:150px;border-radius:50%;margin:0 auto 1.1rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:900;background:conic-gradient(var(--gold) var(--pct),rgba(255,255,255,.08) 0);position:relative}
+.score-circle::before{content:'';position:absolute;inset:11px;background:var(--depth);border-radius:50%}
+.score-circle span{position:relative;z-index:1;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.wall-msg{background:rgba(0,0,0,.35);border-inline-start:3px solid var(--gold);padding:13px;margin:10px 0;border-radius:10px}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;z-index:100000;padding:16px;backdrop-filter:blur(8px)}
+.modal-overlay.active{display:flex}
+.modal{width:min(92vw,520px);max-height:90vh;overflow:auto;background:linear-gradient(145deg,rgba(15,23,42,.98),rgba(5,5,8,.99));border-radius:22px;padding:24px;border:2px solid rgba(212,175,55,.35);position:relative}
+.close-modal{position:absolute;top:9px;inset-inline-end:13px;font-size:1.8rem;color:var(--muted);cursor:pointer}
+
+.gate{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;padding:16px;background:radial-gradient(ellipse at 30% 70%,rgba(127,29,29,.28),transparent 50%),var(--abyss)}
+.gate-box{width:min(92vw,780px);max-height:92vh;overflow:auto;background:linear-gradient(145deg,rgba(15,23,42,.98),rgba(5,5,8,.99));border-radius:22px;padding:26px;border:2px solid rgba(212,175,55,.4)}
+.checkbox-container{background:rgba(225,29,72,.1);border:1px solid var(--crimson);padding:16px;border-radius:11px;margin:16px 0;text-align:center}
+
+.footer{padding:50px 5% 130px;text-align:center;border-top:1px solid rgba(212,175,55,.1)}
+.footer-links{display:flex;justify-content:center;gap:1.6rem;margin-top:16px;flex-wrap:wrap}
+.footer a{color:var(--muted);cursor:pointer;font-size:.85rem;text-decoration:none}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:99999;background:linear-gradient(90deg,#000,var(--abyss),#000);border-top:2px solid var(--gold);padding:8px;font-size:.71rem;text-align:center;color:var(--muted)}
+
+.toast{position:fixed;top:165px;left:50%;transform:translateX(-50%) translateY(-80px);opacity:0;padding:13px 24px;border-radius:13px;z-index:100001;font-weight:700;transition:.4s;max-width:90vw;text-align:center;white-space:pre-line}
+.toast.show{transform:translateX(-50%);opacity:1}
+.toast.ok{background:rgba(0,255,136,.14);border:2px solid var(--neon);color:#fff}
+.toast.err{background:rgba(225,29,72,.14);border:2px solid var(--crimson);color:#fff}
+
+.sticky-cta{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);z-index:99997}
+.sticky-cta .btn{padding:14px 34px;font-size:1.05rem;box-shadow:0 10px 30px rgba(225,29,72,.5)}
+
+#whatsapp-float{position:fixed;bottom:90px;right:22px;z-index:99996;background:#25D366;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 7px 22px rgba(37,211,102,.5);text-decoration:none}
+#ai-assistant{position:fixed;bottom:160px;right:22px;z-index:99995;background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#fff;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:23px;cursor:pointer;border:none;box-shadow:0 7px 22px rgba(0,212,255,.4)}
+#share-float{position:fixed;bottom:160px;left:22px;z-index:99995;background:linear-gradient(135deg,#25D366,#0f766e);color:#fff;width:52px;height:52px;border-radius:50%;border:none;font-size:21px;cursor:pointer;box-shadow:0 7px 22px rgba(37,211,102,.4)}
+#back-to-top{position:fixed;bottom:230px;right:26px;z-index:99994;background:rgba(212,175,55,.15);border:1px solid var(--gold);color:var(--gold);width:42px;height:42px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+#back-to-top.show{display:flex}
+
+#aiChatModal .modal{width:min(95vw,410px);height:70vh;display:flex;flex-direction:column;padding:0;overflow:hidden}
+.ai-chat-header{background:linear-gradient(135deg,#00d4ff,#7c3aed);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;color:#fff;font-weight:700}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:15px;background:rgba(0,0,0,.3)}
+.ai-msg{margin-bottom:11px;max-width:86%;padding:10px 13px;border-radius:14px;font-size:.89rem;line-height:1.5}
+.ai-msg.bot{background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.25);margin-inline-end:auto}
+.ai-msg.user{background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.25);margin-inline-start:auto}
+.ai-chat-input{display:flex;gap:8px;padding:11px;border-top:1px solid rgba(212,175,55,.2);background:rgba(0,0,0,.4)}
+.ai-chat-input input{flex:1;margin:0;padding:10px 13px;border-radius:20px;border:1px solid rgba(212,175,55,.3);background:rgba(0,0,0,.4);color:#fff}
+.ai-chat-input button{padding:10px 16px;border-radius:20px;border:none;background:var(--cyan);color:#000;font-weight:700;cursor:pointer}
+
+.offline-banner{position:fixed;top:0;left:0;right:0;background:#9f1239;color:#fff;text-align:center;padding:8px;z-index:1000002;display:none;font-weight:700}
+.offline-banner.show{display:block}
+.hidden{display:none!important}
+
+@media(max-width:900px){
+  .header{flex-direction:column}
+  .sticky-cta .btn{padding:13px 26px;font-size:.98rem}
+  #main{padding-top:190px}
+}
+</style>
+</head>
+<body>
+<div id="offlineBanner" class="offline-banner">لا يوجد اتصال بالإنترنت - بعض الميزات قد لا تعمل</div>
+
+<div class="topbar">
+  <span>🛡️ Fortress AI v6.5 Masterpiece</span>
+  <span style="color:var(--gold);font-weight:700">AMANA-2024-EG-001</span>
+  <span>👥 <span id="liveVisitors">1,247</span></span>
+  <span>🌍 Global</span>
+</div>
+
+<div class="limited-offer" id="limitedOffer">
+  🔥 <span id="limitedOfferText">عرض محدود: خصم <strong>40%</strong> لأول 100 مشترك فقط!</span>
+  <div class="countdown-box" id="countdown"></div>
+</div>
+
+<div class="legacy-progress"><div class="legacy-progress-bar" id="legacyProgressBar"></div></div>
+
+<div class="sticky-cta"><button class="btn btn-p" onclick="scrollToSec('pricing')">🚀 ابدأ الآن - خصم 40%</button></div>
+
+<!-- البوابة -->
+<div id="gate" class="gate">
+  <div class="gate-box">
+    <h1 style="text-align:center;color:var(--gold);margin-bottom:10px">⚖️ اتفاقية الاستخدام القانونية</h1>
+    <p style="text-align:center;color:var(--crimson);font-weight:700;margin-bottom:14px">يجب الموافقة على جميع الشروط للدخول</p>
+    <div style="margin:10px 0;padding:12px;border-radius:10px;background:rgba(0,0,0,.3);border-inline-start:4px solid var(--gold);color:var(--muted);font-size:.88rem">
+      <strong>🔒 الأمان:</strong> تشفير AES-256 · حماية XSS/CSRF · نسخ احتياطي يومي
+    </div>
+    <div style="margin:10px 0;padding:12px;border-radius:10px;background:rgba(0,0,0,.3);border-inline-start:4px solid var(--gold);color:var(--muted);font-size:.88rem">
+      <strong>🛡️ الخصوصية:</strong> لا نبيع بياناتك أبدًا · أنت المالك الوحيد
+    </div>
+    <div style="margin:10px 0;padding:12px;border-radius:10px;background:rgba(0,0,0,.3);border-inline-start:4px solid var(--gold);color:var(--muted);font-size:.88rem">
+      <strong>إخلاء مسؤولية:</strong> أمانة منصة تقنية وليست وصية قانونية رسمية
+    </div>
+    <div class="checkbox-container">
+      <label><input type="checkbox" id="agree" onchange="toggleGate()"> أقر بأنني +18 عاماً وأوافق على جميع الشروط</label>
+    </div>
+    <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-p" id="enterBtn" onclick="acceptGate()" disabled>أوافق وأدخل</button>
+      <button class="btn btn-s" onclick="alert('يجب الموافقة على الشروط')">أرفض</button>
+    </div>
+  </div>
+</div>
+
+<div id="main" class="hidden">
+  <header class="header">
+    <div class="logo" onclick="goHome()">
+      <span style="font-size:1.85rem">⚱️</span>
+      <div><h1>أمانة</h1><div style="color:var(--muted);font-size:.74rem">الخزنة الأبدية · رسائل من الآخرة</div></div>
+    </div>
+    <nav class="nav">
+      <!-- تم إصلاح كل الروابط بإضافة href="#" و return false -->
+      <div class="coins-display" onclick="showToast('رصيدك الحالي: ' + userCoins + ' عملة','ok')">
+        <span>🪙</span><span id="userCoins">0</span> عملة
+      </div>
+      <a href="#" onclick="scrollToSec('services'); return false;">الخدمات</a>
+      <a href="#" onclick="scrollToSec('ai-tools'); return false;">AI</a>
+      <a href="#" onclick="scrollToSec('immortality'); return false;">الخلود</a>
+      <a href="#" onclick="scrollToSec('pricing'); return false;">الأسعار</a>
+      <a href="#" onclick="inviteFriend(); return false;" style="color:var(--neon)">🎁 ادعُ صديق</a>
+      <a href="#" id="authNavBtn" onclick="showLogin(); return false;">دخول</a>
+    </nav>
+    <div class="controls">
+      <select id="langSelect" onchange="changeLanguage(this.value)">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+      </select>
+      <button class="cur-btn active" data-cur="USD" onclick="setCurrency('USD')">USD</button>
+      <button class="cur-btn" data-cur="EGP" onclick="setCurrency('EGP')">EGP</button>
+      <button class="cur-btn" data-cur="EUR" onclick="setCurrency('EUR')">EUR</button>
+      <button class="cur-btn" data-cur="SAR" onclick="setCurrency('SAR')">SAR</button>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="badge">🔐 محمي بالذكاء الاصطناعي + تشفير AES-256</div>
+    <h1><span>ماذا ستقول</span><span>بعد أن تُدفن؟</span></h1>
+    <p>73% من الناس يموتون وتركوا كلمات لم تُقل. أمانة هي الخزنة الرقمية المشفرة لرسائلك الأخيرة.</p>
+    <div class="stats">
+      <div class="stat"><b id="statMessages">12,847</b><span>رسالة محفوظة</span></div>
+      <div class="stat"><b id="statDelivered">3,291</b><span>رسالة وُصلت</span></div>
+      <div class="stat"><b id="visitorCount">1,247</b><span>زائر الآن</span></div>
+      <div class="stat"><b>🔒</b><span>100% آمن</span></div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-p" style="padding:1.05rem 2.5rem;font-size:1.05rem" onclick="scrollToSec('pricing')">🚀 ابدأ الآن - خصم 40%</button>
+      <button class="btn btn-s" onclick="scrollToSec('immortality')">اختبر درجة خلودك</button>
+      <button class="btn btn-s" onclick="inviteFriend()">🎁 ادعُ أصدقاءك</button>
+    </div>
+  </section>
+
+  <div class="trust-bar">
+    <div class="trust-item"><span>🔒</span> تشفير AES-256</div>
+    <div class="trust-item"><span>🛡️</span> خصوصية كاملة</div>
+    <div class="trust-item"><span>✅</span> ضمان 14 يوم</div>
+    <div class="trust-item"><span>🌍</span> متاح عالمياً</div>
+  </div>
+
+  <section class="section" id="services">
+    <h2>الخدمات الأساسية</h2>
+    <div class="grid">
+      <div class="card" onclick="showServiceInfo('will')">
+        <div class="ico">📜</div>
+        <h3>الوصية الرقمية</h3>
+        <p>سجل فيديو أو صوت أو نص يُرسل بعد رحيلك</p>
+      </div>
+      <div class="card" onclick="showServiceInfo('delayed')">
+        <div class="ico">💌</div>
+        <h3>رسائل مؤجلة</h3>
+        <p>توصل في أي تاريخ تختاره</p>
+      </div>
+      <div class="card" onclick="showServiceInfo('enc')">
+        <div class="ico">🔐</div>
+        <h3>تشفير عسكري</h3>
+        <p>AES-256 مثل البنوك</p>
+      </div>
+      <div class="card" onclick="showServiceInfo('key')">
+        <div class="ico">⏰</div>
+        <h3>مفتاح الموت الذكي</h3>
+        <p>يُفتح تلقائياً عند الغياب</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ai-tools">
+    <h2>🤖 أدوات الذكاء الاصطناعي</h2>
+    <div class="grid">
+      <div class="card"><span class="tag">HOT</span><div class="ico">👻</div><h3>الشبح الذكي</h3><span class="price-tag" data-price="49">$49</span><p>يتكلم باسمك بعد الموت</p><div class="pay-buttons"><div id="paypal-ai-ghost" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="card"><div class="ico">🎙️</div><h3>استنساخ الصوت</h3><span class="price-tag" data-price="29">$29</span><p>نسخة مطابقة 99%</p><div class="pay-buttons"><div id="paypal-ai-voice" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="card"><div class="ico">⏳</div><h3>الكبسولة الزمنية</h3><span class="price-tag" data-price="15">$15</span><p>تُفتح بعد سنوات</p><div class="pay-buttons"><div id="paypal-ai-capsule" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="card"><span class="tag">AI</span><div class="ico">🧠</div><h3>محلل المشاعر</h3><span class="price-tag" data-price="19">$19</span><p>يحلل مشاعر رسائلك</p><div class="pay-buttons"><div id="paypal-ai-sentiment" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="card"><span class="tag">NEW</span><div class="ico">✍️</div><h3>كاتب الوصية</h3><span class="price-tag" data-price="35">$35</span><p>يولّد وصية احترافية</p><div class="pay-buttons"><div id="paypal-ai-will" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="card"><div class="ico">🕊️</div><h3>الصفحة التذكارية</h3><span class="price-tag" data-price="45">$45</span><p>صفحة تذكارية مؤمنة</p><div class="pay-buttons"><div id="paypal-ai-memorial" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="gift-cards">
+    <h2>🎁 كروت الهدايا</h2>
+    <div class="gift-grid">
+      <div class="gift-card bronze"><h3>🥉 برونزي</h3><div class="price" data-price="25">$25</div><ul style="list-style:none;text-align:right;margin:1rem 0"><li>✓ رسالة نصية</li><li>✓ 5 سنوات</li></ul><div class="pay-buttons"><div id="paypal-gift-bronze" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="gift-card silver"><h3>🥈 فضي</h3><div class="price" data-price="100">$100</div><ul style="list-style:none;text-align:right;margin:1rem 0"><li>✓ 5 فيديو</li><li>✓ مدى الحياة</li></ul><div class="pay-buttons"><div id="paypal-gift-silver" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="gift-card gold"><h3>🥇 ذهبي</h3><div class="price" data-price="500">$500</div><ul style="list-style:none;text-align:right;margin:1rem 0"><li>✓ باقة الخلود</li><li>✓ شبح متقدم</li></ul><div class="pay-buttons"><div id="paypal-gift-gold" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <h2>اختر باقتك</h2>
+    <p style="text-align:center;color:var(--neon);margin-bottom:14px;font-weight:700">🔥 خصم 40% ساري الآن لأول 100 مشترك</p>
+    <div class="countdown-box" id="countdown2" style="justify-content:center;display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap"></div>
+    <div class="pricing">
+      <div class="plan"><h3>👋 الوداع</h3><div class="big" data-price="9">$9</div><div class="guarantee-badge">✅ ضمان 14 يوم</div><ul class="features"><li>رسالة نصية</li><li>مستلم واحد</li><li>AES-256</li></ul><div class="pay-buttons"><div id="paypal-basic" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="plan feat"><h3>📜 الإرث</h3><div class="big" data-price="29">$29</div><div class="guarantee-badge">✅ ضمان 14 يوم</div><ul class="features"><li>10 فيديو</li><li>5 مستلمين</li><li>شبح أساسي</li></ul><div class="pay-buttons"><div id="paypal-pro" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+      <div class="plan"><h3>✨ الخلود</h3><div class="big" data-price="199">$199</div><div class="guarantee-badge">✅ ضمان 14 يوم</div><ul class="features"><li>غير محدود</li><li>شبح متقدم</li><li>عقد ذكي</li></ul><div class="pay-buttons"><div id="paypal-ultimate" class="paypal-container"></div><a href="https://ipn.eg/S/elmared5/instapay/2ZgbII" target="_blank" class="instapay-btn">InstaPay</a></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>⭐ آراء العملاء</h2>
+    <div class="grid">
+      <div class="testimonial"><p>"أراحتني نفسياً جداً.. عرفت إن كلماتي هتوصل"</p><strong>— أحمد من القاهرة</strong></div>
+      <div class="testimonial"><p>"فكرة عبقرية.. خاصة مفتاح الموت الذكي"</p><strong>— سارة من الإسكندرية</strong></div>
+      <div class="testimonial"><p>"التشفير قوي والدفع سهل وآمن"</p><strong>— محمود من المنصورة</strong></div>
+    </div>
+  </section>
+
+  <section class="roulette-section" id="roulette">
+    <h2>🎲 رسالة عشوائية</h2>
+    <div class="roulette-wheel" onclick="spinRoulette()"><div class="roulette-center">🎲</div></div>
+    <p style="color:#888;max-width:540px;margin:0 auto">كل رسالة حسب الباقة — تُفتح بعد وفاة المرسل</p>
+  </section>
+
+  <section class="section" id="immortality">
+    <h2>🧬 درجة خلودك الرقمي</h2>
+    <div class="quiz-box">
+      <div id="quizStart"><p style="text-align:center;color:var(--muted);margin-bottom:1.3rem">اختبار سريع لدرجة خلودك الرقمي</p><button class="btn btn-p" style="width:100%" onclick="startQuiz()">ابدأ الاختبار</button></div>
+      <div id="quizQuestions" class="hidden"><div id="qText" style="margin-bottom:.9rem;font-weight:600"></div><div class="quiz-options" id="qOptions"></div></div>
+      <div id="quizResult" class="hidden" style="text-align:center">
+        <div class="score-circle" id="scoreCircle" style="--pct:0%"><span id="scoreValue">0%</span></div>
+        <h3 id="scoreTitle" style="color:var(--gold);margin-bottom:1rem"></h3>
+        <button class="btn btn-p" style="width:100%" onclick="resetQuiz()">إعادة الاختبار</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="generator">
+    <h2>✍️ مولّد رسائل الوداع</h2>
+    <div class="gen-box">
+      <label>لمن؟</label>
+      <select id="genTo"><option value="family">للأهل</option><option value="children">للأبناء</option><option value="partner">للشريك</option><option value="friends">للأصدقاء</option></select>
+      <label>النبرة</label>
+      <select id="genTone"><option value="emotional">عاطفية</option><option value="wise">حكيمة</option><option value="hopeful">متفائلة</option></select>
+      <button class="btn btn-p" style="width:100%" onclick="generateMessage()">أنشئ الرسالة</button>
+      <textarea id="genResult" style="min-height:140px;margin-top:12px" readonly></textarea>
+    </div>
+  </section>
+
+  <section class="section" id="wall">
+    <h2>🕊️ جدار الرسائل المجهولة</h2>
+    <div class="wall-box">
+      <div id="wallMessages"></div>
+      <textarea id="wallInput" style="min-height:85px;margin-top:12px" placeholder="اكتب رسالتك المجهولة..." maxlength="400"></textarea>
+      <button class="btn btn-p" style="width:100%;margin-top:9px" onclick="postWallMessage()">انشر مجهولاً</button>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <h2>📬 تواصل معنا</h2>
+    <div class="contact">
+      <div style="text-align:center;margin-bottom:20px;line-height:2">
+        <p><strong style="color:var(--gold)">واتساب:</strong> <a href="https://wa.me/201098378372" target="_blank" style="color:var(--neon)">01098378372</a></p>
+        <p><strong style="color:var(--gold)">العنوان:</strong> الدقهلية - المنصورة</p>
+      </div>
+      <form onsubmit="sendContact(event)">
+        <label>الاسم</label><input required id="cName">
+        <label>البريد</label><input type="email" required id="cEmail">
+        <label>الرسالة</label><textarea required id="cMsg"></textarea>
+        <button class="btn btn-p" style="width:100%">إرسال</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div style="font-size:1.9rem">⚱️</div>
+    <h3 style="color:var(--gold)">أمانة | رسائل من الآخرة</h3>
+    <div class="footer-links">
+      <a href="#" onclick="showToast('منصة أمانة - خزنة رقمية مشفرة','ok'); return false;">من نحن</a>
+      <a href="#" onclick="showToast('لا نبيع بياناتك أبدًا','ok'); return false;">الخصوصية</a>
+      <a href="https://wa.me/201098378372" target="_blank">واتساب</a>
+      <a href="#" onclick="scrollToSec('contact'); return false;">تواصل</a>
+      <a href="#" onclick="inviteFriend(); return false;">ادعُ صديق</a>
+    </div>
+  </footer>
+</div>
+
+<div class="bottom">© 2024-2074 Amana Tech Intelligence S.A.E. | Masterpiece Edition | HSH</div>
+
+<a href="https://wa.me/201098378372" target="_blank" id="whatsapp-float">💬</a>
+<button id="share-float" onclick="inviteFriend()">📤</button>
+<button id="ai-assistant" onclick="openAIAssistant()">🤖</button>
+<div id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<!-- المساعد -->
+<div id="aiChatModal" class="modal-overlay">
+  <div class="modal">
+    <div class="ai-chat-header">
+      <span>🤖 مساعد أمانة الذكي</span>
+      <span class="close-modal" onclick="closeAIAssistant()" style="color:#fff;cursor:pointer">×</span>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="ai-msg bot">مرحباً! أنا مساعد أمانة. اسألني عن الأسعار أو التشفير أو كيف تبدأ.</div>
+    </div>
+    <div class="ai-chat-input">
+      <input type="text" id="aiChatInput" placeholder="اكتب سؤالك..." maxlength="400" onkeypress="if(event.key==='Enter')sendAIMessage()">
+      <button onclick="sendAIMessage()">إرسال</button>
+    </div>
+  </div>
+</div>
+
+<!-- تسجيل الدخول -->
+<div id="authModal" class="modal-overlay">
+  <div class="modal" style="max-width:390px">
+    <span class="close-modal" onclick="closeAuthModal()">×</span>
+    <h2 id="authTitle" style="text-align:center;color:var(--gold)">تسجيل الدخول</h2>
+    <div id="loginForm">
+      <label>البريد</label><input type="email" id="authEmail">
+      <label>كلمة المرور</label><input type="password" id="authPassword">
+      <button class="btn btn-p" style="width:100%;margin-top:9px" onclick="handleLogin()">دخول</button>
+      <p style="text-align:center;margin-top:13px;color:var(--muted)">ليس لديك حساب؟ <a href="#" onclick="showRegisterForm();return false" style="color:var(--gold)">إنشاء حساب</a></p>
+    </div>
+    <div id="registerForm" class="hidden">
+      <label>الاسم</label><input type="text" id="regName">
+      <label>البريد</label><input type="email" id="regEmail">
+      <label>كلمة المرور</label><input type="password" id="regPassword">
+      <button class="btn btn-p" style="width:100%;margin-top:9px" onclick="handleRegister()">إنشاء حساب</button>
+      <p style="text-align:center;margin-top:13px;color:var(--muted)">لديك حساب؟ <a href="#" onclick="showLoginForm();return false" style="color:var(--gold)">تسجيل الدخول</a></p>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://kyzlmrismbvdahkgpvgk.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_G4imsVKT7dZE-Wv1T0eY7A_m4LnCMQR';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null, userCoins = 0, userPoints = 0;
+let currentLang = localStorage.getItem('amana_lang') || 'ar';
+let currentCurrency = localStorage.getItem('amana_currency') || 'USD';
+let legacyProgress = parseInt(localStorage.getItem('amana_progress') || '32');
+
+const rates = {USD:1, EGP:48.5, EUR:0.92, SAR:3.75};
+const symbols = {USD:'$', EGP:'ج.م', EUR:'€', SAR:'ر.س'};
+
+function formatPrice(usd) {
+  const r = rates[currentCurrency] || 1;
+  const s = symbols[currentCurrency] || '$';
+  const v = (usd * r).toFixed(currentCurrency === 'EGP' ? 0 : 2);
+  return currentCurrency === 'EGP' ? `${v} ${s}` : `${s}${v}`;
+}
+function updateAllPrices() {
+  document.querySelectorAll('[data-price]').forEach(el => {
+    el.textContent = formatPrice(+el.dataset.price);
+  });
+}
+function setCurrency(c) {
+  currentCurrency = c;
+  localStorage.setItem('amana_currency', c);
+  document.querySelectorAll('.cur-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-cur="${c}"]`)?.classList.add('active');
+  updateAllPrices();
+  showToast('تم تغيير العملة إلى ' + c, 'ok');
+  increaseLegacy(2);
+}
+
+function updateLegacy() {
+  const bar = document.getElementById('legacyProgressBar');
+  if (bar) bar.style.width = Math.min(legacyProgress, 100) + '%';
+  localStorage.setItem('amana_progress', legacyProgress);
+}
+function increaseLegacy(n = 3) {
+  legacyProgress = Math.min(100, legacyProgress + n);
+  updateLegacy();
+}
+
+function showToast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3800);
+}
+
+function showServiceInfo(type) {
+  const info = {
+    will: {title: "📜 الوصية الرقمية", desc: "سجل رسالة فيديو أو صوت أو نص، وحدد من يستلمها بعد رحيلك. الرسالة تُحفظ مشفرة ولا تُفتح إلا عند تحقق الشروط."},
+    delayed: {title: "💌 الرسائل المؤجلة", desc: "اكتب رسالة الآن واختر تاريخًا في المستقبل. الرسالة ستصل تلقائيًا في الموعد المحدد."},
+    enc: {title: "🔐 التشفير العسكري", desc: "نستخدم تشفير AES-256 وهو نفس مستوى البنوك والمؤسسات العسكرية."},
+    key: {title: "⏰ مفتاح الموت الذكي", desc: "نظام ذكي يراقب نشاطك. إذا غبت لفترة طويلة تحددها أنت، يتم فتح الرسائل تلقائيًا."}
+  };
+  const item = info[type];
+  if (item) {
+    showToast(item.title + "\n\n" + item.desc, "ok");
+    increaseLegacy(1);
+  }
+}
+
+function getSmartReply(q) {
+  q = q.toLowerCase();
+  if (/سعر|باقة|price|plan|كم/.test(q)) return 'الباقات:\n• الوداع: 9$\n• الإرث: 29$\n• الخلود: 199$\n\nخصم 40% لأول 100 مشترك!';
+  if (/تشفير|أمان|secure|encrypt/.test(q)) return 'نستخدم تشفير AES-256 العسكري. بياناتك محمية بالكامل.';
+  if (/شبح|ghost/.test(q)) return 'الشبح الذكي هو نسخة AI منك تتحدث بأسلوبك بعد رحيلك.';
+  if (/كيف|أبدأ|start/.test(q)) return '1. اختر الباقة\n2. ادفع عبر PayPal أو InstaPay\n3. ابدأ تسجيل رسائلك';
+  if (/ضمان|refund/.test(q)) return 'ضمان استرجاع كامل خلال 14 يوم.';
+  if (/مرحبا|hello|hi|السلام/.test(q)) return 'أهلاً بك في أمانة! ⚱️ كيف أساعدك؟';
+  if (/واتساب|تواصل|contact/.test(q)) return 'واتساب: 01098378372';
+  return 'يمكنني مساعدتك في الأسعار أو التشفير أو كيفية البدء أو أي ميزة أخرى.';
+}
+
+async function sendAIMessage() {
+  const input = document.getElementById('aiChatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const box = document.getElementById('aiChatMessages');
+  const user = document.createElement('div');
+  user.className = 'ai-msg user';
+  user.textContent = text;
+  box.appendChild(user);
+  input.value = '';
+  box.scrollTop = box.scrollHeight;
+
+  const load = document.createElement('div');
+  load.className = 'ai-msg bot';
+  load.textContent = 'جاري التفكير...';
+  box.appendChild(load);
+  box.scrollTop = box.scrollHeight;
+
+  setTimeout(() => {
+    load.remove();
+    const bot = document.createElement('div');
+    bot.className = 'ai-msg bot';
+    bot.textContent = getSmartReply(text);
+    box.appendChild(bot);
+    box.scrollTop = box.scrollHeight;
+    increaseLegacy(1);
+  }, 650);
+}
+
+function openAIAssistant() {
+  document.getElementById('aiChatModal').classList.add('active');
+  document.getElementById('aiChatInput').focus();
+}
+function closeAIAssistant() {
+  document.getElementById('aiChatModal').classList.remove('active');
+}
+
+function scrollToSec(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const headerOffset = 160;
+    const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({
+      top: elementPosition - headerOffset,
+      behavior: 'smooth'
+    });
+  }
+}
+function goHome() { scrollToSec('home'); }
+
+function toggleGate() {
+  document.getElementById('enterBtn').disabled = !document.getElementById('agree').checked;
+}
+function acceptGate() {
+  localStorage.setItem('amana_legal_accepted', '1');
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('main').classList.remove('hidden');
+  initApp();
+}
+function checkLegalGate() {
+  if (localStorage.getItem('amana_legal_accepted') === '1') {
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('main').classList.remove('hidden');
+    initApp();
+  }
+}
+
+function changeLanguage(l) {
+  currentLang = l;
+  localStorage.setItem('amana_lang', l);
+  document.getElementById('htmlRoot').lang = l;
+  document.getElementById('htmlRoot').dir = l === 'ar' ? 'rtl' : 'ltr';
+  showToast(l === 'ar' ? 'تم تغيير اللغة' : 'Language changed', 'ok');
+  increaseLegacy(1);
+}
+
+function inviteFriend() {
+  const text = 'أنا بستخدم تطبيق أمانة ⚱️\nالخزنة الرقمية لرسائلك الأخيرة.\nhttps://play.google.com/store/apps/details?id=com.amanatech.amana';
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+  showToast('تم فتح نافذة المشاركة', 'ok');
+  increaseLegacy(3);
+}
+
+function spinRoulette() {
+  const msgs = ['أنا فخور بك', 'سامحني', 'أحبك أكثر مما تعرف', 'لا ندم', 'شكراً على كل شيء'];
+  showToast(msgs[Math.floor(Math.random() * msgs.length)], 'ok');
+  increaseLegacy(1);
+}
+
+const quizData = [
+  {q: 'هل لديك حسابات رقمية كثيرة؟', opts: ['نعم كثير', 'بعض', 'لا'], scores: [80, 50, 20]},
+  {q: 'هل فكرت في رسائل لمن تحب بعد رحيلك؟', opts: ['نعم كثيراً', 'أحياناً', 'أبداً'], scores: [90, 55, 15]},
+  {q: 'هل بياناتك مهمة ومحمية حالياً؟', opts: ['نعم محمية', 'نوعاً ما', 'لا'], scores: [85, 50, 20]}
+];
+let quizIndex = 0, quizScore = 0;
+
+function startQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  document.getElementById('quizStart').classList.add('hidden');
+  document.getElementById('quizQuestions').classList.remove('hidden');
+  showQuestion();
+}
+function showQuestion() {
+  const d = quizData[quizIndex];
+  document.getElementById('qText').textContent = d.q;
+  const opts = document.getElementById('qOptions');
+  opts.innerHTML = '';
+  d.opts.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.textContent = o;
+    b.onclick = () => {
+      quizScore += d.scores[i];
+      quizIndex++;
+      if (quizIndex < quizData.length) showQuestion();
+      else finishQuiz();
+    };
+    opts.appendChild(b);
+  });
+}
+function finishQuiz() {
+  const avg = Math.round(quizScore / quizData.length);
+  document.getElementById('quizQuestions').classList.add('hidden');
+  document.getElementById('quizResult').classList.remove('hidden');
+  document.getElementById('scoreValue').textContent = avg + '%';
+  document.getElementById('scoreCircle').style.setProperty('--pct', avg + '%');
+  document.getElementById('scoreTitle').textContent = avg >= 70 ? 'خلود عالي ✓' : 'يحتاج تحسين';
+  increaseLegacy(5);
+}
+function resetQuiz() {
+  document.getElementById('quizResult').classList.add('hidden');
+  document.getElementById('quizStart').classList.remove('hidden');
+}
+
+function generateMessage() {
+  const msgs = {
+    family: {emotional: 'عائلتي الحبيبة... أحبكم أكثر مما تتصورون. اعتنوا ببعضكم.', wise: 'يا أهلي، الحياة قصيرة. كونوا سنداً لبعض.', hopeful: 'عائلتي، المستقبل أمامكم مشرق. أنا دائماً معكم.'},
+    children: {emotional: 'أبنائي... أنتم أعظم إنجاز في حياتي.', wise: 'يا أولادي، تعلموا من أخطائي وكونوا أفضل.', hopeful: 'أبنائي، أنتم نور المستقبل.'},
+    partner: {emotional: 'أنت نوري في هذه الحياة. شكراً على كل لحظة.', wise: 'يا شريك العمر، أنت أعظم قرار اتخذته.', hopeful: 'معاً إلى الأبد في قلبي.'},
+    friends: {emotional: 'أصدقائي... شكراً على كل الذكريات.', wise: 'يا أصدقاء العمر، أنتم كنز.', hopeful: 'ستظل صداقتنا خالدة.'}
+  };
+  const to = document.getElementById('genTo').value;
+  const tone = document.getElementById('genTone').value;
+  document.getElementById('genResult').value = msgs[to][tone];
+  increaseLegacy(2);
+}
+
+async function postWallMessage() {
+  const text = document.getElementById('wallInput').value.trim();
+  if (!text) return showToast('اكتب رسالة أولاً', 'err');
+  try {
+    await supabaseClient.from('wall_messages').insert([{content: text}]);
+    document.getElementById('wallInput').value = '';
+    showToast('تم النشر مجهولاً ✓', 'ok');
+    loadWall();
+    increaseLegacy(2);
+  } catch (e) {
+    showToast('حدث خطأ', 'err');
+  }
+}
+async function loadWall() {
+  try {
+    const {data} = await supabaseClient.from('wall_messages').select('*').order('created_at', {ascending: false}).limit(25);
+    const box = document.getElementById('wallMessages');
+    box.innerHTML = '';
+    (data || []).forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'wall-msg';
+      d.innerHTML = `<div>${m.content}</div><div style="font-size:.74rem;color:#888;margin-top:5px">مجهول · ${new Date(m.created_at).toLocaleString('ar-EG')}</div>`;
+      box.appendChild(d);
+    });
+  } catch (e) {}
+}
+
+async function sendContact(e) {
+  e.preventDefault();
+  try {
+    await supabaseClient.from('contact_messages').insert([{
+      name: document.getElementById('cName').value,
+      email: document.getElementById('cEmail').value,
+      message: document.getElementById('cMsg').value
+    }]);
+    showToast('تم استلام رسالتك ✓', 'ok');
+    e.target.reset();
+    increaseLegacy(2);
+  } catch (e) {
+    showToast('حدث خطأ', 'err');
+  }
+}
+
+function showLogin() {
+  document.getElementById('authModal').classList.add('active');
+  showLoginForm();
+}
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('active');
+}
+function showLoginForm() {
+  document.getElementById('authTitle').textContent = 'تسجيل الدخول';
+  document.getElementById('loginForm').classList.remove('hidden');
+  document.getElementById('registerForm').classList.add('hidden');
+}
+function showRegisterForm() {
+  document.getElementById('authTitle').textContent = 'إنشاء حساب';
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+}
+
+async function handleLogin() {
+  const email = document.getElementById('authEmail').value.trim();
+  const pass = document.getElementById('authPassword').value;
+  if (!email || !pass) return showToast('املأ الحقول', 'err');
+  try {
+    const {data, error} = await supabaseClient.auth.signInWithPassword({email, password: pass});
+    if (error) throw error;
+    currentUser = data.user;
+    closeAuthModal();
+    showToast('تم تسجيل الدخول ✓', 'ok');
+    document.getElementById('authNavBtn').textContent = 'خروج';
+    document.getElementById('authNavBtn').onclick = async function() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      this.textContent = 'دخول';
+      this.onclick = function() { showLogin(); return false; };
+      showToast('تم الخروج', 'ok');
+    };
+    increaseLegacy(4);
+  } catch (e) {
+    showToast(e.message || 'فشل الدخول', 'err');
+  }
+}
+async function handleRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPassword').value;
+  if (!name || !email || !pass) return showToast('املأ الحقول', 'err');
+  try {
+    const {error} = await supabaseClient.auth.signUp({email, password: pass, options: {data: {full_name: name}}});
+    if (error) throw error;
+    showToast('تم إنشاء الحساب بنجاح', 'ok');
+    showLoginForm();
+  } catch (e) {
+    showToast(e.message || 'فشل التسجيل', 'err');
+  }
+}
+
+function startCountdown() {
+  let end = localStorage.getItem('amana_offer_end') || (Date.now() + 7 * 86400000);
+  localStorage.setItem('amana_offer_end', end);
+  end = +end;
+  function upd() {
+    let d = Math.max(0, end - Date.now());
+    const days = Math.floor(d / 86400000);
+    const h = Math.floor((d % 86400000) / 3600000);
+    const m = Math.floor((d % 3600000) / 60000);
+    const s = Math.floor((d % 60000) / 1000);
+    const html = `<div class="countdown-item"><span>${days}</span><small>يوم</small></div><div class="countdown-item"><span>${h}</span><small>ساعة</small></div><div class="countdown-item"><span>${m}</span><small>دقيقة</small></div><div class="countdown-item"><span>${s}</span><small>ثانية</small></div>`;
+    document.getElementById('countdown').innerHTML = html;
+    document.getElementById('countdown2').innerHTML = html;
+  }
+  upd();
+  setInterval(upd, 1000);
+}
+
+function liveVisitors() {
+  let base = 1247;
+  setInterval(() => {
+    base = Math.max(1100, base + Math.floor(Math.random() * 7) - 3);
+    document.getElementById('liveVisitors').textContent = base.toLocaleString();
+    document.getElementById('visitorCount').textContent = base.toLocaleString();
+  }, 4000);
+}
+
+function renderPayPal(id, amount, desc) {
+  const el = document.getElementById(id);
+  if (!el || el.hasChildNodes() || typeof paypal === 'undefined') return;
+  try {
+    paypal.Buttons({
+      style: {layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal'},
+      createOrder: (d, a) => a.order.create({purchase_units: [{description: desc, amount: {value: amount}}]}),
+      onApprove: (d, a) => a.order.capture().then(() => {
+        showToast('تم الدفع بنجاح ✓', 'ok');
+        increaseLegacy(10);
+      }),
+      onError: () => showToast('حدث خطأ في الدفع', 'err')
+    }).render('#' + id);
+  } catch (e) {}
+}
+
+function initPayPal() {
+  const list = [
+    ['paypal-ai-ghost', '49.00', 'Smart Ghost'],
+    ['paypal-ai-voice', '29.00', 'Voice Clone'],
+    ['paypal-ai-capsule', '15.00', 'Time Capsule'],
+    ['paypal-ai-sentiment', '19.00', 'Sentiment'],
+    ['paypal-ai-will', '35.00', 'Will Writer'],
+    ['paypal-ai-memorial', '45.00', 'Memorial'],
+    ['paypal-gift-bronze', '25.00', 'Bronze Gift'],
+    ['paypal-gift-silver', '100.00', 'Silver Gift'],
+    ['paypal-gift-gold', '500.00', 'Gold Gift'],
+    ['paypal-basic', '9.00', 'Farewell'],
+    ['paypal-pro', '29.00', 'Legacy'],
+    ['paypal-ultimate', '199.00', 'Immortality']
+  ];
+  list.forEach(([id, amt, desc]) => renderPayPal(id, amt, desc));
+}
+
+function initApp() {
+  updateAllPrices();
+  updateLegacy();
+  startCountdown();
+  liveVisitors();
+  loadWall();
+  setTimeout(initPayPal, 1100);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkLegalGate();
+  document.getElementById('langSelect').value = currentLang;
+  setCurrency(currentCurrency);
+  updateLegacy();
+  
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('back-to-top');
+    if (window.scrollY > 400) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+});
+</script>
+</body>
+</html>
